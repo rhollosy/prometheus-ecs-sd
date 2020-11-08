@@ -278,6 +278,7 @@ def extract_path_interval(env_variable):
     return path_interval
 
 def task_info_to_targets(task_info):
+    res = []
     if not task_info.valid():
         return []
     for container_definition in task_info.task_definition['containerDefinitions']:
@@ -328,7 +329,7 @@ def task_info_to_targets(task_info):
                         ec2_instance_id=task_info.container_instance['ec2InstanceId']
                         ecs_container_id=extract_name(container['containerArn'])
 
-                return [Target(
+                res.append(Target(
                     ip=interface_ip,
                     port=first_port,
                     metrics_path=metrics_path,
@@ -338,8 +339,8 @@ def task_info_to_targets(task_info):
                     ecs_task_version=ecs_task_version,
                     ecs_container_id=ecs_container_id,
                     ecs_cluster_name=ecs_cluster_name,
-                    ec2_instance_id=ec2_instance_id)]
-    return []
+                    ec2_instance_id=ec2_instance_id))
+    return res
 
 class Main:
 
